@@ -1,0 +1,41 @@
+import pygame
+import os
+
+# Ici on définit les constantes utilisées dans le jeu
+
+# Taille de ma fenêtre 
+WINDOW_HEIGHT = 600
+WINDOW_WIDTH = 800
+
+
+# Taille de mon damier
+HEIGHT = 400
+WIDTH = 400
+ROWS = 8
+COLS = 8
+SQUARE_LENGTH = HEIGHT//ROWS
+
+# Couleurs utilisées dans le damier
+GREEN = (5,142,70)
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+RED = (255,0,0)
+
+# Images
+PATH = ".\imgs"
+BLACK_TOKENS = pygame.transform.scale(pygame.image.load(os.path.join(PATH, "jetons_noir.png")),  (WIDTH,100))
+WHITE_TOKENS = pygame.transform.scale(pygame.image.load(os.path.join(PATH, "jetons_blanc.png")), (WIDTH,100))
+BACKGROUND = pygame.transform.scale(pygame.image.load(os.path.join(PATH, "bois.jpg")), (200, WINDOW_HEIGHT))
+CHRONOMETER = pygame.transform.scale(pygame.image.load(os.path.join(PATH, "chronometre.png")), (40, 40))
+
+# Constantes utilisées dans la grille de jeu
+EMPTY = 0
+BLACK_TOKEN = 1
+WHITE_TOKEN = 2
+
+# Directions possibles lors du jeu
+DIRECTIONS = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1)]
+TOP = -1
+BOTTOM = +1
+LEFT = -1
+RIGHT = +1
