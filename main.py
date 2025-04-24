@@ -5,6 +5,7 @@ import pygame
 from Constants import *
 import numpy as np
 from game import *
+from AI import *
 
 pygame.init()
 
@@ -60,6 +61,11 @@ while running:
                     if number_of_tokens[0] != NUMBER_OF_BLACK_TOKEN or number_of_tokens[1] != NUMBER_OF_WHITE_TOKEN:
                         NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN = number_of_tokens
                         player=WHITE_TOKEN if player==BLACK_TOKEN else BLACK_TOKEN
+                        update_checkerboard(window, grid)
+                        best_move_for_ai = get_best_shot(grid, player, 1)[:2]
+                        number_of_tokens = play_a_shot(grid=grid, player=player, position=best_move_for_ai,  number_of_tokens=[NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN])
+                        NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN = number_of_tokens
+                        player=WHITE_TOKEN if player==BLACK_TOKEN else BLACK_TOKEN                  
                         update_checkerboard(window, grid)
     update_timers(window, BLACK_TOKEN_TIMER, WHITE_TOKEN_TIMER, player, NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN)
     pygame.display.update()

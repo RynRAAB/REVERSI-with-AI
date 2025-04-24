@@ -139,20 +139,30 @@ def update_timers (WIN, BLACK_TOKEN_TIMER, WHITE_TOKEN_TIMER, player, NUMBER_OF_
     else :
         pygame.draw.rect(WIN, RED, (602,520, 197, 41), 2, border_radius=15)
 
-def game_won(grid, player, number_of_player_tokens, number_of_opponent_player_tokens):
+def game_won(grid, player):
+    number_of_player_tokens, number_of_opponent_player_tokens= 0, 0
     for row in range (ROWS):
         for col in range (COLS):
             if grid[row, col] == EMPTY :
                 if len(tokens_to_invert(grid, player, (row,col))) > 0 :
                     return False
+            elif grid[row, col] == player:
+                number_of_player_tokens+=1
+            else:
+                number_of_opponent_player_tokens+=1
     return number_of_player_tokens > number_of_opponent_player_tokens
 
-def game_lose(grid, player, number_of_player_tokens, number_of_opponent_player_tokens):
+def game_lose(grid, player):
+    number_of_player_tokens, number_of_opponent_player_tokens = 0, 0
     for row in range (ROWS):
         for col in range (COLS):
             if grid[row, col] == EMPTY :
                 if len(tokens_to_invert(grid, player, (row,col))) > 0 :
                     return False
+            elif grid[row, col] == player:
+                number_of_player_tokens += 1
+            else:
+                number_of_opponent_player_tokens += 1
     return number_of_player_tokens < number_of_opponent_player_tokens
 
 def get_valid_shots(grid, player):
@@ -163,5 +173,5 @@ def get_valid_shots(grid, player):
                 score = len(tokens_to_invert(grid,player, (row,col)))
                 if score>0:
                     valid_shots.append((row, col, score-1))
-    # on retourne valid_shots  sous forme de tuples (y,x,s) où (y,x) est la position de la case correspondant au coup dans la grille, et s le score de ce coup
+    # on retourne valid_shots sous forme d'une liste de tuples (y,x,s) où (y,x) est la position de la case correspondant au coup dans la grille, et s le score de ce coup
     return valid_shots
