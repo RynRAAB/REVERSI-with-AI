@@ -1,6 +1,5 @@
 # ce fichier main.py contient la boucle du jeu
 
-
 import pygame
 from Constants import *
 import numpy as np
@@ -24,8 +23,7 @@ WHITE_TOKEN_TIMER = 0
 NUMBER_OF_BLACK_TOKEN = 2
 NUMBER_OF_WHITE_TOKEN = 2
 current_time = pygame.time.get_ticks()
-
-while running:
+while not game_won(grid, WHITE_TOKEN) and not game_lose(grid, WHITE_TOKEN) and not game_won(grid, BLACK_TOKEN) and not game_lose(grid, WHITE_TOKEN):
     clock.tick(50)
     if pygame.time.get_ticks()-current_time>1000:
         if player == BLACK_TOKEN:
@@ -50,24 +48,36 @@ while running:
                         window.blit(text_surface, text_rect)
 
     # cette partie s'occupe de la boucle de jeu entre les deux joueurs 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT :
-            running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN: # evenement correspondant à un click de souris
-            if event.button == 1: # click sur bouton gauche
-                y,x = handle_click(y=event.pos[1], x=event.pos[0])
-                if (y,x) != (-1,-1) and grid[y,x]==EMPTY:
-                    number_of_tokens = play_a_shot(grid=grid, player=player, position=(y,x),  number_of_tokens=[NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN])
-                    if number_of_tokens[0] != NUMBER_OF_BLACK_TOKEN or number_of_tokens[1] != NUMBER_OF_WHITE_TOKEN:
-                        NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN = number_of_tokens
-                        player=WHITE_TOKEN if player==BLACK_TOKEN else BLACK_TOKEN
-                        update_checkerboard(window, grid)
-                        best_move_for_ai = get_best_shot(grid, player, 1)[:2]
-                        number_of_tokens = play_a_shot(grid=grid, player=player, position=best_move_for_ai,  number_of_tokens=[NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN])
-                        NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN = number_of_tokens
-                        player=WHITE_TOKEN if player==BLACK_TOKEN else BLACK_TOKEN                  
-                        update_checkerboard(window, grid)
+    # for event in pygame.event.get():
+    #     if event.type == pygame.QUIT :
+    #         running = False
+    #     elif event.type == pygame.MOUSEBUTTONDOWN: # evenement correspondant à un click de souris
+    #         if event.button == 1: # click sur bouton gauche
+    #             y,x = handle_click(y=event.pos[1], x=event.pos[0])
+    #             if (y,x) != (-1,-1) and grid[y,x]==EMPTY:
+    #                 number_of_tokens = play_a_shot(grid=grid, player=player, position=(y,x),  number_of_tokens=[NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN])
+    #                 if number_of_tokens[0] != NUMBER_OF_BLACK_TOKEN or number_of_tokens[1] != NUMBER_OF_WHITE_TOKEN:
+    #                     NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN = number_of_tokens
+    #                     player=WHITE_TOKEN if player==BLACK_TOKEN else BLACK_TOKEN
+    #                     update_checkerboard(window, grid)
+
+    if player == BLACK_TOKEN:
+        best_move_for_ai = get_best_shot(grid, player, 1)
+    else :
+        best_move_for_ai = get_best_shot(grid, player, 4)
+        
+    if best_move_for_ai : 
+        best_move_for_ai = best_move_for_ai[:2]
+        number_of_tokens = play_a_shot(grid=grid, player=player, position=best_move_for_ai,  number_of_tokens=[NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN])
+        if number_of_tokens[0] != NUMBER_OF_BLACK_TOKEN or number_of_tokens[1] != NUMBER_OF_WHITE_TOKEN:
+            NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN = number_of_tokens
+            player = BLACK_TOKEN if player == WHITE_TOKEN else WHITE_TOKEN
+            update_checkerboard(window, grid)
+                        
     update_timers(window, BLACK_TOKEN_TIMER, WHITE_TOKEN_TIMER, player, NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN)
     pygame.display.update()
+
+print("BLACK="+str(NUMBER_OF_BLACK_TOKEN))
+print("WHITE="+str(NUMBER_OF_WHITE_TOKEN))
 
 pygame.quit()
