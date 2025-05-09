@@ -42,6 +42,7 @@ BOTTOM = +1
 LEFT = -1
 RIGHT = +1
 
+# poids (importance) de chaque case du Reversi (utilisé dans la fonction d'évaluation)
 POSITION_WEIGHTS = [
             [40, 3, 15,  10,  10, 15, 3, 40],
             [3, 0, 9, 12, 12, 9, 0, 3],
@@ -52,3 +53,11 @@ POSITION_WEIGHTS = [
             [3, 0, 9, 12, 12, 9, 0, 3],
             [40, 3, 15,  10,  10, 15, 3, 40]
         ]
+
+# définir les trois niveaux de difficulté
+# with_pruning pour dire si c'est avec élagage ou pas
+LEVELS = {
+    "Facile" : {"with_pruning":False, "depth":1},
+    "Moyen" : {"with_pruning":False, "depth":3},
+    "Difficile" : {"with_pruning":True, "depth":5},    
+}

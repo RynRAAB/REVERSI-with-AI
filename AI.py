@@ -219,6 +219,6 @@ def get_best_shot(grid, player, depth, with_pruning):
 
         if score > best_score:
             best_score = score
-            best_move = move 
+            best_move = move
     
     return best_move

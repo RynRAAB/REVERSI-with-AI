@@ -67,7 +67,7 @@ levels = [
 ]
 
 # boucle principale du jeu
-def level_AI_menu():
+def level_AI_menu(num_AI):
     pygame.display.set_caption("Niveau de l'IA")
     while True:
         window.fill(GRAY)
@@ -86,7 +86,7 @@ def level_AI_menu():
         
         # gestion des affichages
         title_font = pygame.font.SysFont(None, 50)
-        title_surf = title_font.render("Choisissez le niveau de difficulté de l'IA :", True, BLACK)
+        title_surf = title_font.render("Choisissez le niveau de difficulté de l'IA " + num_AI + " : ", True, BLACK)
         title_rect = title_surf.get_rect(center=(WINDOW_WIDTH // 2, 80))
         window.blit(title_surf, title_rect)
         for level in levels:
@@ -99,12 +99,17 @@ def level_AI_menu():
         pygame.display.flip()
 
 
-if __name__ == "__main__":
-    choix = level_AI_menu()
-    print("Mode choisi :", choix)
+# if __name__ == "__main__":
+#     mode = main_menu()
+#     if mode=="Humain vs Humain":
+#         pass
+#     else:
+#         choix = level_AI_menu("")
+#         print("Mode choisi :", choix)
 
 
-    
+
+
 
     
 
