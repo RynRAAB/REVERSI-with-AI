@@ -37,9 +37,9 @@ def has_neighbour_token(grid, position) :
     for direction in DIRECTIONS:
         dy, dx = direction
         j, i = y+dy, x+dx
-        if 0<=j<8 and 0<=i<8 and grid[j,i] != EMPTY :
+        if 0<=j<8 and 0<=i<8 and grid[j][i] != EMPTY :
             return True
-    return False       
+    return False
 
 
 # Retourne les directions possibles...
@@ -53,9 +53,9 @@ def find_valid_directions(grid, player, position) :
         dy, dx = direction
         j, i = y+dy, x+dx
         player_found = False
-        if 0<=i<8 and 0<=j<8 and grid[j,i] == opponent_player :
-            while 0<=j<8 and 0<=i<8 and grid[j,i]!=EMPTY and not player_found :
-                if grid[j,i]==player :
+        if 0<=i<8 and 0<=j<8 and grid[j][i] == opponent_player :
+            while 0<=j<8 and 0<=i<8 and grid[j][i]!=EMPTY and not player_found :
+                if grid[j][i]==player :
                     player_found = True
                 j, i = j+dy, i+dx
             if player_found:
@@ -69,7 +69,6 @@ def is_valid_shot(grid, player, position):
     return len(directions) != 0
 
 
-
 def tokens_to_invert(grid, player, position) :
     valid_directions = find_valid_directions(grid=grid, position=position, player=player)
     opponent = BLACK_TOKEN if player==WHITE_TOKEN else WHITE_TOKEN
@@ -80,15 +79,15 @@ def tokens_to_invert(grid, player, position) :
         last_player_token_position = +1
         cpt = 1
         j, i =  y+dy, x+dx 
-        while 0<=i<8 and 0<=j<8 and grid[j,i] != EMPTY:
-            if grid[j,i]==player:
+        while 0<=i<8 and 0<=j<8 and grid[j][i] != EMPTY:
+            if grid[j][i]==player:
                 last_player_token_position = cpt
             j, i = j+dy, i+dx
             cpt+=1
         j, i =  y+dy, x+dx 
         cpt=1
         while cpt<last_player_token_position:
-            if grid[j,i] == opponent:
+            if grid[j][i] == opponent:
                 tokens_to_invert.append((j,i))
             j, i, cpt = j+dy, i+dx, cpt+1
     if tokens_to_invert!=[]:
@@ -102,7 +101,7 @@ def play_a_shot(grid, player, position, number_of_tokens):
         return number_of_tokens
     for token in tokens :
         y, x = token
-        grid[y,x] = BLACK_TOKEN if player==BLACK_TOKEN else WHITE_TOKEN
+        grid[y][x] = BLACK_TOKEN if player==BLACK_TOKEN else WHITE_TOKEN
         if player==BLACK_TOKEN :
             NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN = NUMBER_OF_BLACK_TOKEN+1, NUMBER_OF_WHITE_TOKEN-1
         else : 
@@ -139,31 +138,29 @@ def update_timers (WIN, BLACK_TOKEN_TIMER, WHITE_TOKEN_TIMER, player, NUMBER_OF_
     else :
         pygame.draw.rect(WIN, RED, (602,520, 197, 41), 2, border_radius=15)
 
-def game_won(grid, player):
-    number_of_player_tokens, number_of_opponent_player_tokens= 0, 0
+def game_over(grid) :
+    black_tokens, white_tokens = 0, 0
     for row in range (ROWS):
         for col in range (COLS):
-            if grid[row, col] == EMPTY :
-                if len(tokens_to_invert(grid, player, (row,col))) > 0 :
-                    return False
-            elif grid[row, col] == player:
-                number_of_player_tokens+=1
-            else:
-                number_of_opponent_player_tokens+=1
-    return number_of_player_tokens > number_of_opponent_player_tokens
+            if grid[row][col] == EMPTY:
+                if len(tokens_to_invert(grid, WHITE_TOKEN, (row,col))) + len(tokens_to_invert(grid, BLACK_TOKEN, (row,col))) > 0 :
+                    return (False, black_tokens, white_tokens)
+                elif grid[row][col] == WHITE_TOKEN:
+                    white_tokens+=1
+                else:
+                    black_tokens+=1
+    return (True, black_tokens, white_tokens)
 
-def game_lose(grid, player):
-    number_of_player_tokens, number_of_opponent_player_tokens = 0, 0
-    for row in range (ROWS):
-        for col in range (COLS):
-            if grid[row, col] == EMPTY :
-                if len(tokens_to_invert(grid, player, (row,col))) > 0 :
-                    return False
-            elif grid[row, col] == player:
-                number_of_player_tokens += 1
-            else:
-                number_of_opponent_player_tokens += 1
-    return number_of_player_tokens < number_of_opponent_player_tokens
+
+def game_won(grid, player):
+    gameover, black_tokens, white_tokens = game_over(grid)
+    if not gameover :
+        return False
+    elif player == BLACK_TOKEN:
+        return black_tokens > white_tokens
+    else:
+        return white_tokens > black_tokens
+
 
 def get_valid_shots(grid, player):
     valid_shots = []
