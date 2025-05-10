@@ -6,6 +6,33 @@ from game import *
 from AI import *
 from menus import main_menu, level_AI_menu
 
+def display_ai_levels(surface, ai1_label, ai2_label):
+    font = pygame.font.Font(None, 28) 
+    pygame.draw.rect(surface, GRAY, (0, 0, WINDOW_WIDTH, 30))
+
+    label = f" Noire : {ai1_label}    |     Blanche : {ai2_label}"
+    text_surface = font.render(label, True, BLACK)
+    text_rect = text_surface.get_rect(center=(WINDOW_WIDTH // 2, 15))
+
+    surface.blit(text_surface, text_rect)
+
+def display_winner(grid):
+    game_ended, black_tokens, white_tokens = game_over(grid)
+    font = pygame.font.Font(None, 48)
+
+    if black_tokens > white_tokens:
+        message = "Les Noirs ont gagné !"
+    elif white_tokens > black_tokens:
+        message = "Les Blancs ont gagné !"
+    else:
+        message = "Match nul !"
+
+    text_surface = font.render(message, True, RED)
+    text_rect = text_surface.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+    window.blit(text_surface, text_rect)
+    pygame.display.update()
+
+
 pygame.init()
 
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -13,11 +40,11 @@ window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
 
 clock = pygame.time.Clock()
-grid = initialise_game()
 
 
 
 def human_vs_human():
+    grid = initialise_game()
     player= BLACK_TOKEN
     update_checkerboard(window, grid)
     BLACK_TOKEN_TIMER = 0
@@ -75,6 +102,8 @@ def human_vs_human():
             return
     
     while running:
+        update_checkerboard(window, grid)
+        display_winner(grid)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # Clique sur le bouton "X"
                 pygame.quit()
@@ -82,8 +111,11 @@ def human_vs_human():
 
 
 def human_vs_ai(AI_level):
-    player= BLACK_TOKEN
+    grid = initialise_game()
+    player= BLACK_TOKEN    
     update_checkerboard(window, grid)
+    display_ai_levels(window, "Humain", AI_level)
+    pygame.display.update()
     BLACK_TOKEN_TIMER = 0
     WHITE_TOKEN_TIMER = 0
     NUMBER_OF_BLACK_TOKEN = 2
@@ -132,6 +164,8 @@ def human_vs_ai(AI_level):
                             NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN = number_of_tokens
                             player=WHITE_TOKEN 
                             update_checkerboard(window, grid)
+                            display_ai_levels(window, "Humain", AI_level)
+
         update_timers(window, BLACK_TOKEN_TIMER, WHITE_TOKEN_TIMER, player, NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN)
         pygame.display.update()
 
@@ -145,17 +179,22 @@ def human_vs_ai(AI_level):
                     NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN = number_of_tokens
                     player = BLACK_TOKEN
                     update_checkerboard(window, grid)
+                    display_ai_levels(window, "Humain", AI_level)
+                    log_token_counts(grid)
 
         if not running:
             pygame.quit()
             return
     while running:
+        update_checkerboard(window, grid)
+        display_winner(grid)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # Clique sur le bouton "X"
                 pygame.quit()
                 return
 
-def ai_vs_ai(AI1_level, AI2_level):
+def ai_vs_ai(AI1_level_label, AI2_level_label):
+    grid = initialise_game()
     player= BLACK_TOKEN
     update_checkerboard(window, grid)
     BLACK_TOKEN_TIMER = 0
@@ -174,9 +213,9 @@ def ai_vs_ai(AI1_level, AI2_level):
                 running = False
 
         if player == BLACK_TOKEN:
-            level = LEVELS[AI1_level]
+            level = LEVELS[AI1_level_label]
         else:
-            level = LEVELS[AI2_level]
+            level = LEVELS[AI2_level_label]
         best_move_for_ai = get_best_shot(grid, player, level["depth"], level["with_pruning"])
         if best_move_for_ai :
             best_move_for_ai = best_move_for_ai[:2]
@@ -185,9 +224,15 @@ def ai_vs_ai(AI1_level, AI2_level):
                 NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN = number_of_tokens
                 player = BLACK_TOKEN if player == WHITE_TOKEN else WHITE_TOKEN
                 update_checkerboard(window, grid)
+                display_ai_levels(window, AI1_level_label, AI2_level_label)
+                log_token_counts(grid)
+
             else:
                 player = BLACK_TOKEN if player == WHITE_TOKEN else WHITE_TOKEN
                 update_checkerboard(window, grid)
+                display_ai_levels(window, AI1_level_label, AI2_level_label)
+                log_token_counts(grid)
+
         
         if not running:
             pygame.quit()
@@ -197,6 +242,8 @@ def ai_vs_ai(AI1_level, AI2_level):
         pygame.display.update()
     
     while running:
+        update_checkerboard(window, grid)
+        display_winner(grid)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # Clique sur le bouton "X"
                 pygame.quit()
