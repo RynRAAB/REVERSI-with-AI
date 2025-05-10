@@ -94,23 +94,22 @@ def tokens_to_invert(grid, player, position) :
         tokens_to_invert.append(position)
     return tokens_to_invert
 
-def play_a_shot(grid, player, position, number_of_tokens):
-    NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN = number_of_tokens
+def play_a_shot(grid, player, position, number_of_tokens=None):
     tokens = tokens_to_invert(grid, player, position)
-    if tokens == [] :
-        return number_of_tokens
-    for token in tokens :
-        y, x = token
-        grid[y][x] = BLACK_TOKEN if player==BLACK_TOKEN else WHITE_TOKEN
-        if player==BLACK_TOKEN :
-            NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN = NUMBER_OF_BLACK_TOKEN+1, NUMBER_OF_WHITE_TOKEN-1
-        else : 
-            NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN = NUMBER_OF_BLACK_TOKEN-1, NUMBER_OF_WHITE_TOKEN+1
-    if player==BLACK_TOKEN :
-        NUMBER_OF_WHITE_TOKEN += 1
-    else:
-        NUMBER_OF_BLACK_TOKEN += 1    
-    return (NUMBER_OF_BLACK_TOKEN,NUMBER_OF_WHITE_TOKEN)
+    if not tokens:
+        return number_of_tokens if number_of_tokens else (0, 0)  # ou None
+
+    for y, x in tokens:
+        grid[y][x] = player  # retourne les pions
+
+    y, x = position
+    grid[y][x] = player  # place le pion du joueur
+
+    # Recalcul immédiat à partir de la grille
+    black = sum(1 for r in range(ROWS) for c in range(COLS) if grid[r, c] == BLACK_TOKEN)
+    white = sum(1 for r in range(ROWS) for c in range(COLS) if grid[r, c] == WHITE_TOKEN)
+
+    return(black, white)
 
 # Cette fonction retourne les coordonnées de la case de la grille correspondante à un clic de souris
 def handle_click(y, x) :
@@ -140,15 +139,17 @@ def update_timers (WIN, BLACK_TOKEN_TIMER, WHITE_TOKEN_TIMER, player, NUMBER_OF_
 
 def game_over(grid) :
     black_tokens, white_tokens = 0, 0
-    for row in range (ROWS):
-        for col in range (COLS):
+    for row in range(ROWS):
+        for col in range(COLS):
             if grid[row][col] == EMPTY:
-                if len(tokens_to_invert(grid, WHITE_TOKEN, (row,col))) + len(tokens_to_invert(grid, BLACK_TOKEN, (row,col))) > 0 :
-                    return (False, black_tokens, white_tokens)
-                elif grid[row][col] == WHITE_TOKEN:
-                    white_tokens+=1
-                else:
-                    black_tokens+=1
+                if (len(tokens_to_invert(grid, WHITE_TOKEN, (row, col))) > 0 or
+                    len(tokens_to_invert(grid, BLACK_TOKEN, (row, col))) > 0):
+                    return (False, 0, 0)  # Partie non terminée
+
+            elif grid[row][col] == WHITE_TOKEN:
+                white_tokens += 1
+            elif grid[row][col] == BLACK_TOKEN:
+                black_tokens += 1
     return (True, black_tokens, white_tokens)
 
 
@@ -172,3 +173,8 @@ def get_valid_shots(grid, player):
                     valid_shots.append((row, col, score-1))
     # on retourne valid_shots sous forme d'une liste de tuples (y,x,s) où (y,x) est la position de la case correspondant au coup dans la grille, et s le score de ce coup
     return valid_shots
+
+def log_token_counts(grid):
+    black = sum(1 for row in range(ROWS) for col in range(COLS) if grid[row, col] == BLACK_TOKEN)
+    white = sum(1 for row in range(ROWS) for col in range(COLS) if grid[row, col] == WHITE_TOKEN)
+    print(f"[TOKENS] ⚫ Noir : {black}  | ⚪ Blanc : {white}")
