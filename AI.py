@@ -2,6 +2,8 @@
 
 from Constants import *
 from game import game_over, get_valid_shots, play_a_shot
+from evaluation_functions import evaluate_function_v1, evaluate_function_v2
+
 
 # fonction d'évaluation de chaque état de notre jeu, elle donne estimation sur l'état du jeu
 def evaluate_function(grid, player):
@@ -113,16 +115,16 @@ def evaluate_function(grid, player):
 
 
 # algo minimax
-def minimax(grid, player, is_maximizing, depth) :
+def minimax(grid, player, is_maximizing, depth, maximizing_player) :
     opponent = WHITE_TOKEN if player==BLACK_TOKEN else BLACK_TOKEN
     # ici on est arrivé au bout de la récursivité de notre minmax
     # donc on doit faire appel à notre fonction d'évaluation pour retournen le score
     if depth==0 or game_over(grid)[0] :
-        return evaluate_function(grid, player)
+        return evaluate_function_v2(grid, maximizing_player)
     
     moves = get_valid_shots(grid, player)
     if not moves:
-        score = minimax(grid, opponent, not is_maximizing, depth-1)
+        score = minimax(grid, opponent, not is_maximizing, depth-1,maximizing_player)
         return score
 
     # on vérifie si c est le tour de notre IA (autrement dit si c le tour de max)
@@ -134,7 +136,7 @@ def minimax(grid, player, is_maximizing, depth) :
             grid_copy = grid.copy()
             play_a_shot(grid=grid_copy, player=player, position=(row, col), number_of_tokens=[2,2])
             # appeler recursivement le minimax sur le prochain coup avec une profondeur en moins (pour traiter le prochain coup)
-            score = minimax(grid_copy, opponent, False, depth-1)
+            score = minimax(grid_copy, opponent, False, depth - 1, maximizing_player)
             # mettre à jour le meilleur score
             best_score = max(score ,best_score)
         return best_score
@@ -147,7 +149,7 @@ def minimax(grid, player, is_maximizing, depth) :
             grid_copy = grid.copy()
             play_a_shot(grid=grid_copy, player=player, position=(row,col), number_of_tokens=[2,2])
             # appeler recursivement le minimax sur le prochain coup avec une profondeur en moins (pour traiter le prochain coup)
-            score = minimax(grid_copy, opponent, True, depth-1)
+            score = minimax(grid_copy, opponent, True, depth - 1, maximizing_player)
             # mettre à jour le meilleur score
             best_score = min(score, best_score)
         return best_score
@@ -215,10 +217,13 @@ def get_best_shot(grid, player, depth, with_pruning):
         if with_pruning:
             score = minimax_with_alpha_beta_pruning(grid_copy, opponent, False, depth-1, float("-inf"), float("+inf"))
         else:
-            score = minimax(grid_copy, opponent, False, depth-1)
+            score = minimax(grid_copy, opponent, False, depth-1, player)
 
         if score > best_score:
             best_score = score
             best_move = move
+        print(f"[EVAL] move={move[:2]} | score={score:.2f}")
+    
+    print(f"[CHOIX] Coup {(row, col)} → score = {score:.2f}")
     
     return best_move
