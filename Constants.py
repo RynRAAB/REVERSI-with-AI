@@ -35,14 +35,15 @@ EMPTY = 0
 BLACK_TOKEN = 1
 WHITE_TOKEN = 2
 
-# Directions possibles lors du jeu
+# Directions de jeu possibles dans le reversi (haut, bas, gauche, droite, haut-gauche, haut-droite, bas-gauche, bas-droite) 
 DIRECTIONS = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1)]
 TOP = -1
 BOTTOM = +1
 LEFT = -1
 RIGHT = +1
 
-# poids (importance) de chaque case du Reversi (utilisé dans la fonction d'évaluation)
+# table de pondération du reversi
+# poids (importance) de chaque case du Reversi (utilisé dans la fonction d'évaluation) pour évaluer un plateau donnée en fonction de l'occupation de la grille
 POSITION_WEIGHTS = [
     [100, -25, 10, 5, 5, 10, -25, 100],
     [-25, -50, 1, 1, 1, 1, -50, -25],
@@ -54,10 +55,11 @@ POSITION_WEIGHTS = [
     [100, -25, 10, 5, 5, 10, -25, 100]
 ]
 
-# définir les trois niveaux de difficulté
-# with_pruning pour dire si c'est avec élagage ou pas
+# définir les trois niveaux de difficulté du reversi (Facile, Moyen et Difficile)
+# with_pruning pour dire si c'est avec ou sans élagage 
+# depth correspond à la profondeur d'anticipation de notre minmax
 LEVELS = {
     "Facile" : {"with_pruning":False, "depth":1},
     "Moyen" : {"with_pruning":False, "depth":3},
-    "Difficile" : {"with_pruning":True, "depth":5},    
+    "Difficile" : {"with_pruning":True, "depth":4},    
 }

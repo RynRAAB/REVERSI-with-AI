@@ -1,0 +1,65 @@
+# Projet Reversi
+
+## Description
+Ce projet est une implémentation numérique du jeu de société classique **Reversi** (également connu sous le nom d'Othello). Le jeu permet à deux joueurs de s'affronter dans une bataille stratégique pour dominer le plateau.
+
+## Fonctionnalités
+- Mode deux joueurs.
+- Mode joueur humain vs IA.
+- Mode IA vs IA.
+- 3 niveaux de difficultés (Facile, Moyen et Difficile)
+- Rendu dynamique du plateau de jeu.
+- Application des règles pour les coups valides et le calcul des scores.
+
+## Installation
+1. Clonez le dépôt :
+    git clone https://github.com/RynRAAB/REVERSI-with-AI
+
+2. Accédez au répertoire du projet (depuis un cmd):
+    cd REVERSI-with-AI
+
+3. Installez Python si ce n'est pas encore fait, tout en privilégiant une version Python 3.x au minimum
+    https://www.python.org/downloads/
+
+4. Installez les dépendances et les bibliothèques utilisées (principalement numpy et pygame) :
+    **pip install pygame**
+    **pip install numpy**
+
+## Utilisation
+1. Lancez l'application du jeu Reversi.py et pour ce faire:
+1.1. Ouvrez un cmd.
+1.2. Placez-vous au niveau du projet dans le dossier REVERSI-with-AI
+1.3. Lancez Reversi en tapant python Reversi.py 
+2. Suivez les instructions à l'écran pour jouer.
+
+## Règles du Reversi
+1. Le jeu se joue sur un plateau de 8x8 cases.
+2. Les joueurs placent leurs pièces à tour de rôle sur le plateau.
+3. Un coup est valide s'il capture une ou plusieurs pièces de l'adversaire.
+4. La partie se termine lorsqu'aucun coup valide n'est possible pour les deux joueurs.
+5. Le joueur ayant le plus de pièces sur le plateau à la fin gagne.
+
+## Contribution
+Les contributions sont les bienvenues ! Veuillez suivre ces étapes :
+1. Forkez le dépôt.
+2. Créez une nouvelle branche :
+    git checkout -b nom-de-fonctionnalité
+3. Validez vos modifications :
+    git commit -m "Ajout de nom-de-fonctionnalité"
+4. Poussez votre branche :
+    git push origin nom-de-fonctionnalité
+5. Ouvrez une pull request.
+
+## Auteurs
+
+Ce projet a été réalisé par deux étudiants de Licence 3 Informatique et Applications de l'université Paris City dans le cadre d'un projet lié à l'UE Intelligence Artificielle.
+
+
+## Remerciements
+
+- **Inspiration** : Le jeu de société classique Reversi, ainsi que les nombreux autres jeux de stratégie qui ont influencé cette conception.
+- **Pygame** : Un grand merci à la communauté Pygame pour leur soutien et leurs ressources qui ont facilité le développement de l'interface graphique.
+- **Tutoriels et Documentation** : Merci aux auteurs de tutoriels et à la documentation officielle de Python et Pygame pour leurs guides clairs et détaillés.
+
+
+N'hésitez pas à nous contacter pour toute question ou suggestion !
