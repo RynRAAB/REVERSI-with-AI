@@ -190,8 +190,8 @@ def get_best_shot(grid, player, depth, with_pruning):
             best_score = score
             best_move = move
         # DEBUG
-        print(f"[EVAL] move={move[:2]} | score={score:.2f}")
+        # print(f"[EVAL] move={move[:2]} | score={score:.2f}")
     # DEBUG
-    print(f"[CHOIX] Coup {(row, col)} → score = {score:.2f}")
+    # print(f"[CHOIX] Coup {(row, col)} → score = {score:.2f}")
     # on retourne le meilleur coup trouvé par notre IA
     return best_move

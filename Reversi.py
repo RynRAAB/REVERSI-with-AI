@@ -33,9 +33,7 @@ def display_winner(grid):
 
 
 pygame.init()
-
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-
 
 
 clock = pygame.time.Clock()
@@ -97,7 +95,9 @@ def human_vs_human():
         pygame.display.update()
 
         if not running:
-            pygame.quit()
+            # pygame.quit()
+            black, white= log_token_counts(grid)
+            print(f"[TOKENS] ⚫ Noir : {black}  | ⚪ Blanc : {white}")
             return
     
     while running:
@@ -105,7 +105,9 @@ def human_vs_human():
         display_winner(grid)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # Clique sur le bouton "X"
-                pygame.quit()
+                # pygame.quit()
+                black, white= log_token_counts(grid)
+                print(f"[TOKENS] ⚫ Noir : {black}  | ⚪ Blanc : {white}")
                 return
 
 
@@ -182,14 +184,18 @@ def human_vs_ai(AI_level):
                     log_token_counts(grid)
 
         if not running:
-            pygame.quit()
+            # pygame.quit()
+            black, white= log_token_counts(grid)
+            print(f"[TOKENS] ⚫ Noir : {black}  | ⚪ Blanc : {white}")
             return
     while running:
         update_checkerboard(window, grid)
         display_winner(grid)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # Clique sur le bouton "X"
-                pygame.quit()
+                # pygame.quit()
+                black, white= log_token_counts(grid)
+                print(f"[TOKENS] ⚫ Noir : {black}  | ⚪ Blanc : {white}")
                 return
 
 def ai_vs_ai(AI1_level_label, AI2_level_label):
@@ -234,8 +240,10 @@ def ai_vs_ai(AI1_level_label, AI2_level_label):
 
         
         if not running:
-            pygame.quit()
-            return
+            # pygame.quit()
+            black, white= log_token_counts(grid)
+            print(f"[TOKENS] ⚫ Noir : {black}  | ⚪ Blanc : {white}")
+            return black, white
 
         update_timers(window, BLACK_TOKEN_TIMER, WHITE_TOKEN_TIMER, player, NUMBER_OF_BLACK_TOKEN, NUMBER_OF_WHITE_TOKEN)
         pygame.display.update()
@@ -245,8 +253,12 @@ def ai_vs_ai(AI1_level_label, AI2_level_label):
         display_winner(grid)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # Clique sur le bouton "X"
-                pygame.quit()
-                return
+                # pygame.quit()
+                black, white= log_token_counts(grid)
+                print(f"[TOKENS] ⚫ Noir : {black}  | ⚪ Blanc : {white}")
+                return black, white
+    
+    
        
 
 

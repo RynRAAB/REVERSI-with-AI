@@ -297,4 +297,5 @@ def get_valid_shots(grid, player):
 def log_token_counts(grid):
     black = sum(1 for row in range(ROWS) for col in range(COLS) if grid[row, col] == BLACK_TOKEN)
     white = sum(1 for row in range(ROWS) for col in range(COLS) if grid[row, col] == WHITE_TOKEN)
-    print(f"[TOKENS] ⚫ Noir : {black}  | ⚪ Blanc : {white}")
+    # print(f"[TOKENS] ⚫ Noir : {black}  | ⚪ Blanc : {white}")
+    return black, white

@@ -176,7 +176,7 @@ def evaluate_function_v2(grid, player):
     
 
     # Debug
-    print(f"[DEBUG] T:{token_score:>6.1f} | M:{mobility_score:>6.1f} | C:{corner_score:>6.1f} | "
-          f"Danger:{dangerous_norm:>6.1f} | Pos:{position_score_norm:>6.1f} => Total:{final_score:>7.1f}")
+    # print(f"[DEBUG] T:{token_score:>6.1f} | M:{mobility_score:>6.1f} | C:{corner_score:>6.1f} | "
+        #   f"Danger:{dangerous_norm:>6.1f} | Pos:{position_score_norm:>6.1f} => Total:{final_score:>7.1f}")
 
     return final_score
